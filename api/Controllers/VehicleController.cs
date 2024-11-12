@@ -33,7 +33,7 @@ namespace api.Controllers
                     BodyType = dto.BodyType,
                     VIN = dto.VIN,
                     Price = dto.Price,
-                    VehicleTypeID = dto.VehicleTypeID
+                    VehicleTypeID = dto.VehicleTypeID,
                 };
                 return Ok(await vehicleRepository.Create(vehicle));
             }catch (Exception ex)

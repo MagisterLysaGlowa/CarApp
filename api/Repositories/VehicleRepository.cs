@@ -36,7 +36,7 @@ namespace api.Repositories
 
         public async Task<List<Vehicle>> GetAll()
         {
-            List<Vehicle> vehicles = await context.Vehicles.ToListAsync();
+            List<Vehicle> vehicles = await context.Vehicles.Include(z=>z.Engine).Include(y=>y.Gearbox).Include(u=>u.VehicleType).ToListAsync();
             return vehicles;
         }
 

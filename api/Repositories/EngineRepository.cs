@@ -36,7 +36,7 @@ namespace api.Repositories
 
         public async Task<List<Engine>> GetAll()
         {
-            List<Engine> engines = await context.Engines.ToListAsync();
+            List<Engine> engines = await context.Engines.Include(z=>z.FuelType).ToListAsync();
             return engines;
         }
 
