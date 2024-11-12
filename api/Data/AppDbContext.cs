@@ -5,22 +5,20 @@ namespace api.Data
 {
     public class AppDbContext: DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-        }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<Vehicle> Cars { get; set; } = null!;
-        public DbSet<Engine> Engines { get; set; } = null!;
-        public DbSet<Gearbox> Gearboxes { get; set; } = null!;
-        public DbSet<FuelType> FuelTypes { get; set; } = null!;
-        public DbSet<VehicleType> VehicleTypes { get; set; } = null!;
+        public DbSet<Vehicle> Vehicles { get; set; } = default!;
+        public DbSet<Engine> Engines { get; set; } = default!;
+        public DbSet<Gearbox> Gearboxes { get; set; } = default!;
+        public DbSet<FuelType> FuelTypes { get; set; } = default!;
+        public DbSet<VehicleType> VehicleTypes { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configure Car entity
             modelBuilder.Entity<Vehicle>(entity =>
             {
-                entity.HasKey(c => c.CarID);
+                entity.HasKey(c => c.VehicleID);
 
                 // One-to-One relationship between Car and Engine
                 entity.HasOne(c => c.Engine)

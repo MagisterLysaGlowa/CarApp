@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 using System;
 using Microsoft.EntityFrameworkCore;
 using api.Data;
+using Microsoft.Extensions.FileProviders;
+using api.Interfaces;
+using api.Repositories;
 
 namespace api
 {
@@ -15,17 +18,23 @@ namespace api
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
+            builder.Services.AddScoped<IFuelTypeRepository, FuelTypeRepository>();
+            builder.Services.AddScoped<IGearboxRepository, GearboxRepository>();
+            builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+            builder.Services.AddScoped<IEngineRepository, EngineRepository>();
+
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            var app = builder.Build();
 
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ??
                     throw new InvalidOperationException("Connection string 'DefaultConnection' not found"));
             });
+
             builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll", policy =>
@@ -36,11 +45,14 @@ namespace api
                 });
             });
 
+            var app = builder.Build();
+
+            app.UseCors("AllowAll");
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
             }
-            app.UseCors("AllowAll");
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
